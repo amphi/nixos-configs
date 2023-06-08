@@ -1,0 +1,28 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    },
+    "git.openRepositoryInParentFolders": "always",
+    "nix.enableLanguageServer": true,
+    "nix.serverPath": "nil",
+    "nix.serverSettings": {
+        "nil": {
+            "formatting": {
+                "command": [
+                    "nixpkgs-fmt"
+                ]
+            }
+        }
+    },
+    "workbench.colorTheme": "Cobalt2",
+    "workbench.iconTheme": "material-icon-theme",
+    "python.languageServer": "Pylance",
+    "cmake.automaticReconfigure": false,
+    "cmake.configureOnEdit": false,
+    "cmake.configureOnOpen": false,
+    "cmake.statusbar.visibility": "hidden",
+    "cmake.useCMakePresets": "never",
+    "editor.fontFamily": "'Source Code Pro'",
+    "editor.minimap.enabled": false
+}
