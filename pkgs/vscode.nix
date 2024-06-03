@@ -13,7 +13,7 @@ pkgs.vscode-with-extensions.override {
     extensions.vscode-marketplace.davidanson.vscode-markdownlint
     extensions.vscode-marketplace.yzhang.markdown-all-in-one
     extensions.vscode-marketplace.zainchen.json
-    extensions.vscode-marketplace.ms-vscode.makefile-tools
+    # extensions.vscode-marketplace.ms-vscode.makefile-tools
 
     # git
     extensions.vscode-marketplace.waderyan.gitblame
@@ -24,7 +24,7 @@ pkgs.vscode-with-extensions.override {
 
     # C++
     extensions.vscode-marketplace.twxs.cmake
-    extensions.vscode-marketplace.ms-vscode.cmake-tools
+    #extensions.vscode-marketplace.ms-vscode.cmake-tools
     extensions.vscode-marketplace.llvm-vs-code-extensions.vscode-clangd
 
     # Python
@@ -37,5 +37,22 @@ pkgs.vscode-with-extensions.override {
 
     # Rust
     extensions.vscode-marketplace.rust-lang.rust-analyzer
+
+    # Markdown
+    extensions.vscode-marketplace.bierner.github-markdown-preview
+    extensions.vscode-marketplace.bierner.markdown-mermaid
+    extensions.vscode-marketplace.bierner.markdown-emoji
+    extensions.vscode-marketplace.bierner.markdown-checkbox
+    extensions.vscode-marketplace.bierner.markdown-yaml-preamble
+    extensions.vscode-marketplace.bierner.markdown-footnotes
+    extensions.vscode-marketplace.bierner.markdown-prism
+    extensions.vscode-marketplace.bierner.markdown-preview-github-styles
+
+    # Uiua
+    extensions.vscode-marketplace.uiua-lang.uiua-vscode
+
+    # Shell
+    extensions.vscode-marketplace.foxundermoon.shell-format
+    extensions.vscode-marketplace.timonwong.shellcheck
   ]);
 }

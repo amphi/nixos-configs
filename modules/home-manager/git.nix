@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   home.packages = with pkgs; [
     gibo
@@ -26,6 +26,13 @@
     bind diff R !git rebase -i %(commit)^
 
     bind main ! !?git revert %(commit)
+    bind diff ! !?git revert %(commit)
+
+    bind main = !git commit --fixup=%(commit)
+    bind diff = !git commit --fixup=%(commit)
+
+    bind main <Ctrl-R> !git rebase --autosquash -i %(commit)^
+    bind diff <Ctrl-R> !git rebase --autosquash -i %(commit)^
 
     set main-view-id = yes
   '';

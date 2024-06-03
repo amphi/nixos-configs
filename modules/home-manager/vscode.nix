@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   home.packages = with pkgs; [
     nixpkgs-fmt
@@ -6,6 +6,11 @@
 
     # needed for clangd
     clang-tools
+
+    shellcheck
+    shfmt
+
+    black # black formatter
   ];
 
   programs.vscode = {

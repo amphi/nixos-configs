@@ -3,6 +3,12 @@
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true
     },
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false
+    },
+    "black-formatter.path": [
+        "black"
+    ],
     "git.openRepositoryInParentFolders": "always",
     "nix.enableLanguageServer": true,
     "nix.serverPath": "nil",
@@ -24,5 +30,8 @@
     "cmake.statusbar.visibility": "hidden",
     "cmake.useCMakePresets": "never",
     "editor.fontFamily": "'Source Code Pro'",
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
+    "shellformat.path": "/etc/profiles/per-user/seydam/bin/shfmt",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true
 }

@@ -1,8 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 let
   kitty-cobalt2 = ".config/kitty/Cobalt2.conf";
   zsh-cobalt2 = ".oh-my-zsh/themes/cobalt2.zsh-theme";
-  # current-theme = ".config/kitty/mytheme";
 in
 {
   home.file."${kitty-cobalt2}".source = ./cobalt2.kitty-theme;
@@ -16,7 +15,7 @@ in
     enable = true;
     enableCompletion = true;
     enableAutosuggestions = true;
-    enableSyntaxHighlighting = true;
+    syntaxHighlighting.enable = true;
 
     # Don't share command history between zsh sessions.
     history.share = false;
@@ -54,9 +53,7 @@ in
 
   programs.kitty = {
     enable = true;
-    font = {
-      name = "'Source Code Pro'";
-    };
+    font.name = "'Source Code Pro'";
 
     theme = "Cobalt2";
 
@@ -89,11 +86,6 @@ in
       "alt+8" = "goto_tab 8";
       "alt+9" = "goto_tab 9";
     };
-
-    # extraConfig = ''
-    #   include $HOME/${current-theme}
-    # '';
-
   };
 
   programs.direnv = {
@@ -102,5 +94,4 @@ in
   };
 
   programs.htop.enable = true;
-
 }

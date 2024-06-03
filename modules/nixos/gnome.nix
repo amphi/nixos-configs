@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    google-chrome
-
     gnome.dconf-editor
     gnome.gnome-boxes
     gnome.gnome-calculator
@@ -11,12 +9,9 @@
     gnome.gnome-tweaks
     gnome.nautilus
 
-    virt-manager
+    # virt-manager
 
     gparted
-    okular
-
-    dconf2nix
 
     # my current note taking app
     obsidian
@@ -25,10 +20,10 @@
   fonts = {
     fontDir.enable = true;
 
-    enableDefaultFonts = true;
+    enableDefaultPackages = true;
     enableGhostscriptFonts = true;
 
-    fonts = with pkgs; [
+    packages = with pkgs; [
       corefonts
       freefont_ttf
       liberation_ttf
@@ -41,21 +36,19 @@
     };
   };
 
-  virtualisation.libvirtd = {
-    enable = true;
-    onBoot = "ignore";
-    onShutdown = "shutdown";
+  # virtualisation.libvirtd = {
+  #   enable = true;
+  #   onBoot = "ignore";
+  #   onShutdown = "shutdown";
 
-    qemu.swtpm.enable = true;
+  #   qemu.swtpm.enable = true;
 
-    qemu.ovmf.enable = true;
-    qemu.ovmf.packages = [ pkgs.OVMFFull.fd ];
-  };
+    # qemu.ovmf.enable = true;
+    # qemu.ovmf.packages = [ pkgs.OVMFFull.fd ];
+  # };
 
-  # USB Passthrough.
-  virtualisation.spiceUSBRedirection.enable = true;
-
-  networking.firewall.enable = false;
+  # # USB Passthrough.
+  # virtualisation.spiceUSBRedirection.enable = true;
 
   # Enable CUPS to print documents.
   services.printing = {

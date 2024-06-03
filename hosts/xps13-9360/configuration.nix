@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, my-vscode, ... }:
+{ config, pkgs, lib, my-vscode, ... }:
 
 {
   imports =
@@ -24,16 +24,6 @@
   # Enable swap on luks
   boot.initrd.luks.devices."luks-b02e2325-4eb4-4998-97df-171a798fe43c".device = "/dev/disk/by-uuid/b02e2325-4eb4-4998-97df-171a798fe43c";
   boot.initrd.luks.devices."luks-b02e2325-4eb4-4998-97df-171a798fe43c".keyFile = "/crypto_keyfile.bin";
-
-  networking.hostName = "seydam-xps13"; # Define your hostname.
-  # networking.wireless.enable = true; # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -97,7 +87,7 @@
     isNormalUser = true;
     description = "seydam";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
+    packages = [
       my-vscode
     ];
   };
@@ -108,9 +98,11 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #  wget
+    trace-cmd
+    linuxPackages_latest.perf
   ];
+
+  vbox.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -125,11 +117,106 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  # systemd.network.links."39-testNic" = {
+  #   matchConfig.PermanentMACAddress = "00:0a:cd:26:04:17";
+  #   linkConfig.Name = "testNic";
+  # };
+
+  services.udev.extraRules = ''
+    SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", \
+  ATTR{address}=="00:0a:cd:26:04:17", KERNEL=="eth*", NAME="testNic"
+  '';
+
+  networking = {
+    hostName = "seydam-xps13";
+    networkmanager.enable = true;
+    firewall = {
+      enable = true;
+    #   allowedTCPPorts = [ 53 67 68 69 80 443 6969 7000 8000 8080 8081 9000 ];
+    #   allowedUDPPorts = [ 53 67 68 69 80 443 6969 7000 8000 8080 8081 9000 ];
+    };
+    # interfaces = {
+    #   "testNic".ipv4.addresses = [{
+    #     address = "192.168.35.1";
+    #     prefixLength = 24;
+    #   }];
+    #   "tap0" = {
+    #     ipv4.addresses = [{
+    #       address = "192.168.33.1";
+    #       prefixLength = 24;
+    #     }];
+    #     virtual = true;
+    #     virtualType = "tap";
+    #   };
+    #   "tap1" = {
+    #     ipv4.addresses = [{
+    #       address = "192.168.34.1";
+    #       prefixLength = 24;
+    #     }];
+    #     virtual = true;
+    #     virtualType = "tap";
+    #   };
+    # };
+  };
+
+  # services.dnsmasq = {
+  #   enable = true;
+  #   resolveLocalQueries = false;
+  #   settings = {
+  #     interface = [ "tap0" "tap1" "testNic" ];
+  #     # interface = [ "tap0" "tap1" ];
+  #     bind-interfaces = true;
+  #     dhcp-authoritative = true;
+
+  #     enable-tftp = true;
+  #     tftp-root = "/var/lib/tftpboot/";
+
+  #     log-queries = true;
+  #     log-debug = true;
+  #     log-dhcp = true;
+  #     log-facility = "/var/log/dnsmasq.log";
+  #     listen-address = [ "192.168.33.1" "192.168.34.1" "192.168.35.1" ];
+  #     # no-resolv = true;
+  #     dhcp-option = [
+  #       3
+  #     ];
+  #     dhcp-range = [
+  #       "tap0,192.168.33.2,192.168.33.2,infinite"
+  #       "tap1,192.168.34.2,192.168.34.2,infinite"
+  #       "testNic,192.168.35.100,192.168.35.110,infinite"
+  #     ];
+  #     dhcp-host = [
+  #       "08:00:27:c9:dc:e3,vm0,192.168.33.2"
+  #       "08:00:27:c9:dc:e4,vm1,192.168.34.2"
+  #     ];
+  #     dhcp-match = [
+  #       "x86PC, option:client-arch, 0" #BIOS x86
+  #       "BC_EFI, option:client-arch, 7" #EFI x86-64
+  #     ];
+  #     dhcp-boot = [
+  #       "tag:x86PC,ipxe.kpxe"
+  #       "tag:BC_EFI,snponly.efi"
+  #     ];
+  #   };
+  # };
+
+  services.nginx = {
+    enable = true;
+    virtualHosts = {
+      "localhost" = {
+        listen = [
+          { addr = "localhost"; port = 8081; }
+        ];
+        locations."/" = {
+          extraConfig = ''
+            resolver 100.100.100.100 valid=30s ipv6=off;
+            set $artifacts artifact.vpn.cyberus-technology.de;
+            proxy_pass https://$artifacts;
+          '';
+        };
+      };
+    };
+  };
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.flags = [ "--recreate-lock-file" ];

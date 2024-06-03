@@ -13,12 +13,17 @@ in
     git
     cachix
     curl
+    dig
     file
     pciutils
     wget
     zip
     toybox
     tldr
+    niv
+    element-desktop
+    usbutils
+    tree
 
     (python3.withPackages my-python-packages)
   ];

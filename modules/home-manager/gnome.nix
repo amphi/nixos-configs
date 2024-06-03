@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ nixpkgs, pkgs, ... }:
 let
   mkPrimitive = t: v: {
     _type = "gvariant";
@@ -61,20 +61,30 @@ in
     gnome.gnome-shell-extensions
     gnomeExtensions.sound-output-device-chooser
     gnomeExtensions.tailscale-status
+
+    okular
+    google-chrome
+    teams-for-linux
+
+    dconf2nix
   ];
 
-  xdg.mimeApps = {
-    enable = true;
-    associations.added = {
-      "application/pdf" = [ "okularApplication_pdf.desktop" ];
-    };
-    defaultApplications = {
-      "text/html" = [ "google-chrome.desktop" ];
-      "x-scheme-handler/http" = [ "google-chrome.desktop" ];
-      "x-scheme-handler/https" = [ "google-chrome.desktop" ];
-      "x-scheme-handler/about" = [ "google-chrome.desktop" ];
-      "x-scheme-handler/unknown" = [ "google-chrome.desktop" ];
-      "application/pdf" = [ "okularApplication_pdf.desktop" ];
+  xdg = {
+    configFile."mimeapps.list".force = true;
+    mimeApps = {
+      enable = true;
+      associations.added = {
+        "application/pdf" = [ "okularApplication_pdf.desktop" ];
+      };
+      defaultApplications = {
+        "text/html" = [ "google-chrome.desktop" ];
+        "x-scheme-handler/http" = [ "google-chrome.desktop" ];
+        "x-scheme-handler/https" = [ "google-chrome.desktop" ];
+        "x-scheme-handler/about" = [ "google-chrome.desktop" ];
+        "x-scheme-handler/unknown" = [ "google-chrome.desktop" ];
+        "x-scheme-handler/mkteams" = [ "teams-for-linux.desktop" ];
+        "application/pdf" = [ "okularApplication_pdf.desktop" ];
+      };
     };
   };
 }
