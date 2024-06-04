@@ -36,20 +36,6 @@
     };
   };
 
-  # virtualisation.libvirtd = {
-  #   enable = true;
-  #   onBoot = "ignore";
-  #   onShutdown = "shutdown";
-
-  #   qemu.swtpm.enable = true;
-
-    # qemu.ovmf.enable = true;
-    # qemu.ovmf.packages = [ pkgs.OVMFFull.fd ];
-  # };
-
-  # # USB Passthrough.
-  # virtualisation.spiceUSBRedirection.enable = true;
-
   # Enable CUPS to print documents.
   services.printing = {
     enable = true;
