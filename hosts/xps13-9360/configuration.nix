@@ -2,14 +2,17 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, my-vscode, ... }:
+{ config, pkgs, nixosModules, lib, ... }:
 
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = with nixosModules; [
+    cleanup-profiles
+    common
+    desktop
+    gnome
+    virtualbox
+    work
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -19,6 +22,11 @@
   # Setup keyfile
   boot.initrd.secrets = {
     "/crypto_keyfile.bin" = null;
+  };
+
+  services.tailscale = {
+    enable = true;
+    package = pkgs.unstable.tailscale;
   };
 
   # Enable swap on luks
@@ -88,7 +96,7 @@
     description = "seydam";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = [
-      my-vscode
+      # my-vscode
     ];
   };
 
@@ -123,8 +131,8 @@
   # };
 
   services.udev.extraRules = ''
-    SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", \
-  ATTR{address}=="00:0a:cd:26:04:17", KERNEL=="eth*", NAME="testNic"
+      SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", \
+    ATTR{address}=="00:0a:cd:26:04:17", KERNEL=="eth*", NAME="testNic"
   '';
 
   networking = {
@@ -132,8 +140,8 @@
     networkmanager.enable = true;
     firewall = {
       enable = true;
-    #   allowedTCPPorts = [ 53 67 68 69 80 443 6969 7000 8000 8080 8081 9000 ];
-    #   allowedUDPPorts = [ 53 67 68 69 80 443 6969 7000 8000 8080 8081 9000 ];
+      #   allowedTCPPorts = [ 53 67 68 69 80 443 6969 7000 8000 8080 8081 9000 ];
+      #   allowedUDPPorts = [ 53 67 68 69 80 443 6969 7000 8000 8080 8081 9000 ];
     };
     # interfaces = {
     #   "testNic".ipv4.addresses = [{

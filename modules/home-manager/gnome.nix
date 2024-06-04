@@ -1,4 +1,4 @@
-{ nixpkgs, pkgs, ... }:
+{ pkgs, ... }:
 let
   mkPrimitive = t: v: {
     _type = "gvariant";

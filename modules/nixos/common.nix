@@ -1,4 +1,4 @@
-{ config, pkgs, my-vscode, ... }:
+{ config, pkgs, overlays, ... }:
 let
   my-python-packages = ps: with ps; [
     pip
@@ -34,6 +34,7 @@ in
   };
 
   nixpkgs = {
+    inherit overlays;
     config = {
       allowUnfree = true;
       allowUnfreePredicate = _: true;
@@ -65,7 +66,7 @@ in
       ];
       shell = "${pkgs.zsh}/bin/zsh";
       initialPassword = "1234";
-      packages = [ my-vscode ];
+      packages = [ ];
     };
   };
 
